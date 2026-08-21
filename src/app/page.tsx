@@ -2,16 +2,17 @@
 
 import { useState, useRef, useCallback } from "react";
 import { drawCards, TarotCard } from "@/lib/tarot-deck";
+import { TarotCardDisplay } from "@/components/TarotCard";
 import { toPng } from "html-to-image";
 
 type Step = "code" | "question" | "cards" | "reading";
 
 const TOPICS = [
-  { label: "Love & Relationships", emoji: "💕" },
-  { label: "Career & Work", emoji: "💼" },
-  { label: "Finance & Wealth", emoji: "💰" },
-  { label: "Health & Wellness", emoji: "🌿" },
-  { label: "Personal Growth", emoji: "🌟" },
+  { label: "Love & Relationships", icon: "♡" },
+  { label: "Career & Work", icon: "✦" },
+  { label: "Finance & Wealth", icon: "❖" },
+  { label: "Health & Wellness", icon: "⚘" },
+  { label: "Personal Growth", icon: "✩" },
 ];
 
 export default function Home() {
@@ -53,7 +54,6 @@ export default function Home() {
     setCards(drawn);
     setStep("cards");
 
-    // Reveal cards one by one
     setTimeout(() => setRevealedCards([0]), 500);
     setTimeout(() => setRevealedCards([0, 1]), 1300);
     setTimeout(() => setRevealedCards([0, 1, 2]), 2100);
@@ -72,7 +72,6 @@ export default function Home() {
       const data = await res.json();
       setReading(data.reading);
 
-      // Save to DB
       await fetch("/api/save-reading", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -114,7 +113,7 @@ export default function Home() {
         {Array.from({ length: 30 }).map((_, i) => (
           <div
             key={i}
-            className="absolute w-1 h-1 bg-white rounded-full star"
+            className="absolute w-0.5 h-0.5 bg-amber-200/60 rounded-full star"
             style={{
               left: `${(i * 37) % 100}%`,
               top: `${(i * 53) % 100}%`,
@@ -127,63 +126,72 @@ export default function Home() {
       <div className="w-full max-w-md mx-auto relative z-10">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gold mb-2">Mystic Tarot</h1>
-          <p className="text-purple-300 text-sm">
+          <p className="text-amber-400/60 text-xs tracking-[0.3em] uppercase mb-1">&#10022; &#10022; &#10022;</p>
+          <h1 className="text-3xl font-serif font-bold text-amber-100 mb-1 tracking-wide">
+            Mystic Tarot
+          </h1>
+          <p className="text-amber-400/50 text-xs tracking-[0.2em] uppercase">
             PSD President&apos;s Challenge 2026
           </p>
         </div>
 
         {/* Step: Enter Code */}
         {step === "code" && (
-          <div className="fade-in-up bg-purple-deep/80 backdrop-blur border border-purple-mid rounded-2xl p-8">
-            <h2 className="text-xl font-semibold text-center mb-6 text-gold-light">
-              Enter Your Code
-            </h2>
+          <div className="fade-in-up bg-[#12122a]/90 backdrop-blur border border-amber-900/30 rounded-xl p-8">
+            <div className="text-center mb-6">
+              <p className="text-amber-400/40 text-sm mb-2">&#9753;</p>
+              <h2 className="text-lg font-serif text-amber-100">
+                Enter Your Code
+              </h2>
+              <p className="text-amber-200/40 text-xs mt-1">Present your token to begin</p>
+            </div>
             <input
               type="text"
               value={code}
               onChange={(e) => setCode(e.target.value.toUpperCase())}
-              placeholder="TAROT-XXXXXX"
-              className="w-full px-4 py-3 bg-purple-dark/60 border border-purple-mid rounded-xl text-center text-lg tracking-widest text-white placeholder-purple-300/50 focus:outline-none focus:border-gold/50"
+              placeholder="e.g. A3F7B2"
+              maxLength={6}
+              className="w-full px-4 py-3 bg-[#0a0a1a] border border-amber-900/30 rounded-lg text-center text-xl tracking-[0.4em] text-amber-100 font-mono placeholder-amber-200/20 focus:outline-none focus:border-amber-600/50"
               onKeyDown={(e) => e.key === "Enter" && validateCode()}
             />
             {error && (
-              <p className="text-red-400 text-sm text-center mt-3">{error}</p>
+              <p className="text-red-400/80 text-sm text-center mt-3">{error}</p>
             )}
             <button
               onClick={validateCode}
               disabled={!code || loading}
-              className="w-full mt-6 py-3 bg-gradient-to-r from-gold/80 to-gold rounded-xl font-semibold text-purple-deep disabled:opacity-50 transition-all hover:shadow-lg hover:shadow-gold/20"
+              className="w-full mt-6 py-3 bg-gradient-to-r from-amber-700 to-amber-600 rounded-lg font-medium text-amber-50 disabled:opacity-40 transition-all hover:from-amber-600 hover:to-amber-500 border border-amber-500/30"
             >
-              {loading ? "Validating..." : "Unlock Your Reading"}
+              {loading ? "Validating..." : "Begin Reading"}
             </button>
           </div>
         )}
 
         {/* Step: Choose Topic */}
         {step === "question" && (
-          <div className="fade-in-up bg-purple-deep/80 backdrop-blur border border-purple-mid rounded-2xl p-8">
-            <h2 className="text-xl font-semibold text-center mb-2 text-gold-light">
-              What draws your curiosity?
-            </h2>
-            <p className="text-purple-300 text-sm text-center mb-6">
-              Choose a topic for your reading
-            </p>
-            <div className="space-y-3">
+          <div className="fade-in-up bg-[#12122a]/90 backdrop-blur border border-amber-900/30 rounded-xl p-8">
+            <div className="text-center mb-6">
+              <p className="text-amber-400/40 text-sm mb-2">&#9753;</p>
+              <h2 className="text-lg font-serif text-amber-100">
+                What draws your curiosity?
+              </h2>
+              <p className="text-amber-200/40 text-xs mt-1">Choose a domain for your spread</p>
+            </div>
+            <div className="space-y-2.5">
               {TOPICS.map((topic) => (
                 <button
                   key={topic.label}
                   onClick={() => startReading(topic.label)}
-                  className="w-full py-3 px-4 bg-purple-dark/60 border border-purple-mid rounded-xl text-left hover:border-gold/50 hover:bg-purple-dark transition-all flex items-center gap-3"
+                  className="w-full py-3 px-4 bg-[#0a0a1a]/60 border border-amber-900/20 rounded-lg text-left hover:border-amber-600/40 hover:bg-[#1a1a2e] transition-all flex items-center gap-3 group"
                 >
-                  <span className="text-2xl">{topic.emoji}</span>
-                  <span className="text-white">{topic.label}</span>
+                  <span className="text-amber-500/60 text-lg group-hover:text-amber-400 transition-colors">{topic.icon}</span>
+                  <span className="text-amber-100/80 text-sm group-hover:text-amber-100 transition-colors">{topic.label}</span>
                 </button>
               ))}
             </div>
-            <div className="mt-4 pt-4 border-t border-purple-mid">
-              <p className="text-purple-300 text-xs text-center mb-2">
-                Or ask your own question:
+            <div className="mt-5 pt-4 border-t border-amber-900/20">
+              <p className="text-amber-200/30 text-xs text-center mb-2">
+                Or ask your own question
               </p>
               <div className="flex gap-2">
                 <input
@@ -191,12 +199,12 @@ export default function Home() {
                   value={question}
                   onChange={(e) => setQuestion(e.target.value)}
                   placeholder="Type your question..."
-                  className="flex-1 px-3 py-2 bg-purple-dark/60 border border-purple-mid rounded-lg text-sm text-white placeholder-purple-300/50 focus:outline-none focus:border-gold/50"
+                  className="flex-1 px-3 py-2 bg-[#0a0a1a] border border-amber-900/20 rounded-lg text-sm text-amber-100 placeholder-amber-200/20 focus:outline-none focus:border-amber-600/40"
                 />
                 <button
                   onClick={() => question && startReading(question)}
                   disabled={!question}
-                  className="px-4 py-2 bg-gold/80 rounded-lg text-sm font-semibold text-purple-deep disabled:opacity-50"
+                  className="px-4 py-2 bg-amber-700/60 border border-amber-600/30 rounded-lg text-sm font-medium text-amber-100 disabled:opacity-30 hover:bg-amber-700"
                 >
                   Ask
                 </button>
@@ -208,42 +216,27 @@ export default function Home() {
         {/* Step: Card Reveal */}
         {step === "cards" && (
           <div className="fade-in-up">
-            <h2 className="text-xl font-semibold text-center mb-2 text-gold-light">
-              Your Cards Reveal...
-            </h2>
-            <p className="text-purple-300 text-sm text-center mb-8">
-              {question}
-            </p>
-            <div className="flex justify-center gap-4">
+            <div className="text-center mb-6">
+              <h2 className="text-lg font-serif text-amber-100">
+                Your Cards Reveal...
+              </h2>
+              <p className="text-amber-200/40 text-xs mt-1 italic">
+                {question}
+              </p>
+            </div>
+            <div className="flex justify-center gap-3">
               {cards.map((card, i) => (
-                <div key={i} className="flex flex-col items-center gap-2">
-                  <p className="text-xs text-purple-300">
-                    {["Past", "Present", "Future"][i]}
-                  </p>
-                  <div
-                    className={`w-24 h-36 rounded-xl flex items-center justify-center text-4xl transition-all duration-700 ${
-                      revealedCards.includes(i)
-                        ? "bg-gradient-to-b from-purple-dark to-purple-deep border-2 border-gold/60 card-glow"
-                        : "bg-gradient-to-b from-purple-mid to-purple-dark border border-purple-mid"
-                    }`}
-                  >
-                    {revealedCards.includes(i) ? (
-                      <span>{card.emoji}</span>
-                    ) : (
-                      <span className="text-2xl text-purple-300/50">?</span>
-                    )}
-                  </div>
-                  {revealedCards.includes(i) && (
-                    <p className="text-xs text-gold-light text-center max-w-24 leading-tight">
-                      {card.name}
-                    </p>
-                  )}
-                </div>
+                <TarotCardDisplay
+                  key={i}
+                  card={card}
+                  revealed={revealedCards.includes(i)}
+                  position={["Past", "Present", "Future"][i]}
+                />
               ))}
             </div>
             {revealedCards.length === 3 && (
-              <p className="text-center text-purple-300 text-sm mt-6 animate-pulse">
-                Reading the cards...
+              <p className="text-center text-amber-300/50 text-xs mt-6 animate-pulse font-serif italic">
+                Interpreting the spread...
               </p>
             )}
           </div>
@@ -252,54 +245,53 @@ export default function Home() {
         {/* Step: Reading */}
         {step === "reading" && (
           <div className="fade-in-up">
-            <div ref={readingRef} className="p-6">
-              <h2 className="text-xl font-semibold text-center mb-2 text-gold-light">
-                Your Reading
-              </h2>
-              <p className="text-purple-300 text-xs text-center mb-6">
-                {question}
-              </p>
-              <div className="flex justify-center gap-4 mb-6">
+            <div ref={readingRef} className="p-5">
+              <div className="text-center mb-4">
+                <p className="text-amber-400/40 text-xs">&#10022; &#10022; &#10022;</p>
+                <h2 className="text-lg font-serif text-amber-100 mt-1">
+                  Your Reading
+                </h2>
+                <p className="text-amber-200/40 text-xs mt-1 italic">
+                  {question}
+                </p>
+              </div>
+              <div className="flex justify-center gap-3 mb-5">
                 {cards.map((card, i) => (
-                  <div key={i} className="flex flex-col items-center gap-1">
-                    <p className="text-[10px] text-purple-300">
-                      {["Past", "Present", "Future"][i]}
-                    </p>
-                    <div className="w-16 h-24 rounded-lg bg-gradient-to-b from-purple-dark to-purple-deep border border-gold/40 flex items-center justify-center text-2xl">
-                      {card.emoji}
-                    </div>
-                    <p className="text-[10px] text-gold-light text-center max-w-16 leading-tight">
-                      {card.name}
-                    </p>
-                  </div>
+                  <TarotCardDisplay
+                    key={i}
+                    card={card}
+                    revealed={true}
+                    position={["Past", "Present", "Future"][i]}
+                    size="sm"
+                  />
                 ))}
               </div>
               {loading ? (
-                <div className="text-center text-purple-300 animate-pulse">
+                <div className="text-center text-amber-300/50 animate-pulse font-serif italic py-8">
                   <p>The spirits speak...</p>
                 </div>
               ) : (
-                <div className="bg-purple-deep/60 border border-purple-mid rounded-xl p-5">
-                  <p className="text-purple-100 leading-relaxed text-sm whitespace-pre-wrap">
+                <div className="bg-[#0a0a1a]/80 border border-amber-900/20 rounded-lg p-5">
+                  <p className="text-amber-100/80 leading-relaxed text-sm whitespace-pre-wrap font-serif">
                     {reading}
                   </p>
                 </div>
               )}
-              <p className="text-center text-purple-300/50 text-[10px] mt-4">
+              <p className="text-center text-amber-400/30 text-[9px] mt-4 tracking-wider uppercase">
                 Mystic Tarot — PSD President&apos;s Challenge 2026
               </p>
             </div>
 
             {!loading && (
-              <div className="flex flex-col gap-3 mt-4 px-6">
+              <div className="flex flex-col gap-3 mt-4 px-5">
                 <button
                   onClick={saveAsImage}
-                  className="w-full py-3 bg-gradient-to-r from-gold/80 to-gold rounded-xl font-semibold text-purple-deep transition-all hover:shadow-lg hover:shadow-gold/20"
+                  className="w-full py-3 bg-gradient-to-r from-amber-700 to-amber-600 rounded-lg font-medium text-amber-50 transition-all hover:from-amber-600 hover:to-amber-500 border border-amber-500/30"
                 >
                   Save Reading as Image
                 </button>
-                <p className="text-center text-purple-300/60 text-xs">
-                  Long-press or tap the button to save to your phone
+                <p className="text-center text-amber-200/30 text-xs">
+                  Tap to download or take a screenshot
                 </p>
               </div>
             )}
