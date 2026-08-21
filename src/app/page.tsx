@@ -5,7 +5,7 @@ import { drawCards, TarotCard } from "@/lib/tarot-deck";
 import { TarotCardDisplay } from "@/components/TarotCard";
 import { toPng } from "html-to-image";
 
-type Step = "code" | "question" | "cards" | "reading";
+type Step = "code" | "details" | "question" | "cards" | "reading";
 
 const TOPICS = [
   { label: "Love & Relationships", icon: "♡" },
@@ -18,6 +18,8 @@ const TOPICS = [
 export default function Home() {
   const [step, setStep] = useState<Step>("code");
   const [code, setCode] = useState("");
+  const [name, setName] = useState("");
+  const [birthdate, setBirthdate] = useState("");
   const [error, setError] = useState("");
   const [question, setQuestion] = useState("");
   const [cards, setCards] = useState<TarotCard[]>([]);
@@ -40,12 +42,25 @@ export default function Home() {
         setError(data.error || "Invalid code");
         return;
       }
-      setStep("question");
+      setStep("details");
     } catch {
       setError("Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }
+  };
+
+  const proceedToTopics = () => {
+    if (!name.trim()) {
+      setError("Please enter your name");
+      return;
+    }
+    if (!birthdate) {
+      setError("Please enter your birthdate");
+      return;
+    }
+    setError("");
+    setStep("question");
   };
 
   const startReading = (topic: string) => {
@@ -67,7 +82,7 @@ export default function Home() {
       const res = await fetch("/api/reading", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ question: topic, cards: drawnCards }),
+        body: JSON.stringify({ question: topic, cards: drawnCards, name, birthdate }),
       });
       const data = await res.json();
       setReading(data.reading);
@@ -167,6 +182,49 @@ export default function Home() {
           </div>
         )}
 
+        {/* Step: Personal Details */}
+        {step === "details" && (
+          <div className="fade-in-up bg-[#12122a]/90 backdrop-blur border border-amber-900/30 rounded-xl p-8">
+            <div className="text-center mb-6">
+              <p className="text-amber-400/40 text-sm mb-2">&#9753;</p>
+              <h2 className="text-lg font-serif text-amber-100">
+                Tell Us About Yourself
+              </h2>
+              <p className="text-amber-200/40 text-xs mt-1">For a personalised reading</p>
+            </div>
+            <div className="space-y-4">
+              <div>
+                <label className="text-amber-200/60 text-xs uppercase tracking-wider mb-1.5 block">Your Name</label>
+                <input
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Enter your first name"
+                  className="w-full px-4 py-3 bg-[#0a0a1a] border border-amber-900/30 rounded-lg text-amber-100 placeholder-amber-200/20 focus:outline-none focus:border-amber-600/50"
+                />
+              </div>
+              <div>
+                <label className="text-amber-200/60 text-xs uppercase tracking-wider mb-1.5 block">Date of Birth</label>
+                <input
+                  type="date"
+                  value={birthdate}
+                  onChange={(e) => setBirthdate(e.target.value)}
+                  className="w-full px-4 py-3 bg-[#0a0a1a] border border-amber-900/30 rounded-lg text-amber-100 focus:outline-none focus:border-amber-600/50 [color-scheme:dark]"
+                />
+              </div>
+            </div>
+            {error && (
+              <p className="text-red-400/80 text-sm text-center mt-3">{error}</p>
+            )}
+            <button
+              onClick={proceedToTopics}
+              className="w-full mt-6 py-3 bg-gradient-to-r from-amber-700 to-amber-600 rounded-lg font-medium text-amber-50 transition-all hover:from-amber-600 hover:to-amber-500 border border-amber-500/30"
+            >
+              Continue
+            </button>
+          </div>
+        )}
+
         {/* Step: Choose Topic */}
         {step === "question" && (
           <div className="fade-in-up bg-[#12122a]/90 backdrop-blur border border-amber-900/30 rounded-xl p-8">
@@ -249,7 +307,7 @@ export default function Home() {
               <div className="text-center mb-4">
                 <p className="text-amber-400/40 text-xs">&#10022; &#10022; &#10022;</p>
                 <h2 className="text-lg font-serif text-amber-100 mt-1">
-                  Your Reading
+                  Reading for {name}
                 </h2>
                 <p className="text-amber-200/40 text-xs mt-1 italic">
                   {question}
