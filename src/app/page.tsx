@@ -260,41 +260,45 @@ export default function Home() {
             <div className="text-center mb-6">
               <p className="text-amber-400/40 text-sm mb-2">&#9753;</p>
               <h2 className="text-lg font-serif text-amber-100">
-                What draws your curiosity?
+                What would you like to know?
               </h2>
-              <p className="text-amber-200/40 text-xs mt-1">Choose a domain for your spread</p>
+              <p className="text-amber-200/40 text-xs mt-1">Ask anything that&apos;s on your mind</p>
             </div>
-            <div className="space-y-2.5">
-              {TOPICS.map((topic) => (
-                <button
-                  key={topic.label}
-                  onClick={() => startReading(topic.label)}
-                  className="w-full py-3 px-4 bg-[#0a0a1a]/60 border border-amber-900/20 rounded-lg text-left hover:border-amber-600/40 hover:bg-[#1a1a2e] transition-all flex items-center gap-3 group"
-                >
-                  <span className="text-amber-500/60 text-lg group-hover:text-amber-400 transition-colors">{topic.icon}</span>
-                  <span className="text-amber-100/80 text-sm group-hover:text-amber-100 transition-colors">{topic.label}</span>
-                </button>
-              ))}
+
+            {/* Question input — primary */}
+            <div className="mb-5">
+              <textarea
+                value={question}
+                onChange={(e) => setQuestion(e.target.value)}
+                placeholder="e.g. Will I find love this year? Should I change jobs?"
+                rows={2}
+                className="w-full px-4 py-3 bg-[#0a0a1a] border border-amber-900/30 rounded-lg text-sm text-amber-100 placeholder-amber-200/20 focus:outline-none focus:border-amber-600/50 resize-none"
+              />
+              <button
+                onClick={() => question && startReading(question)}
+                disabled={!question}
+                className="w-full mt-3 py-3 bg-gradient-to-r from-amber-700 to-amber-600 rounded-lg font-medium text-amber-50 disabled:opacity-30 transition-all hover:from-amber-600 hover:to-amber-500 border border-amber-500/30"
+              >
+                Reveal My Cards
+              </button>
             </div>
-            <div className="mt-5 pt-4 border-t border-amber-900/20">
-              <p className="text-amber-200/30 text-xs text-center mb-2">
-                Or ask your own question
+
+            {/* Topic shortcuts — secondary */}
+            <div className="pt-4 border-t border-amber-900/20">
+              <p className="text-amber-200/30 text-xs text-center mb-3">
+                Or pick a topic
               </p>
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  value={question}
-                  onChange={(e) => setQuestion(e.target.value)}
-                  placeholder="Type your question..."
-                  className="flex-1 px-3 py-2 bg-[#0a0a1a] border border-amber-900/20 rounded-lg text-sm text-amber-100 placeholder-amber-200/20 focus:outline-none focus:border-amber-600/40"
-                />
-                <button
-                  onClick={() => question && startReading(question)}
-                  disabled={!question}
-                  className="px-4 py-2 bg-amber-700/60 border border-amber-600/30 rounded-lg text-sm font-medium text-amber-100 disabled:opacity-30 hover:bg-amber-700"
-                >
-                  Ask
-                </button>
+              <div className="flex flex-wrap gap-2 justify-center">
+                {TOPICS.map((topic) => (
+                  <button
+                    key={topic.label}
+                    onClick={() => startReading(topic.label)}
+                    className="px-3 py-1.5 bg-[#0a0a1a]/60 border border-amber-900/20 rounded-full text-xs text-amber-200/60 hover:border-amber-600/40 hover:text-amber-100 transition-all"
+                  >
+                    <span className="mr-1">{topic.icon}</span>
+                    {topic.label}
+                  </button>
+                ))}
               </div>
             </div>
           </div>
