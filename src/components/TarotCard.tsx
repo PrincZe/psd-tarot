@@ -12,12 +12,12 @@ interface Props {
 
 export function TarotCardDisplay({ card, revealed, position, size = "md" }: Props) {
   const isMd = size === "md";
-  const cardW = isMd ? "w-[100px]" : "w-[72px]";
-  const cardH = isMd ? "h-[160px]" : "h-[115px]";
+  const cardW = isMd ? "w-[120px]" : "w-[90px]";
+  const cardH = isMd ? "h-[192px]" : "h-[144px]";
 
   return (
-    <div className="flex flex-col items-center gap-1.5">
-      <p className={`${isMd ? "text-xs" : "text-[10px]"} text-amber-200/80 uppercase tracking-wider font-medium`}>
+    <div className="flex flex-col items-center gap-2">
+      <p className={`${isMd ? "text-sm" : "text-xs"} text-amber-200/80 uppercase tracking-wider font-medium`}>
         {position}
       </p>
       <div
@@ -32,7 +32,7 @@ export function TarotCardDisplay({ card, revealed, position, size = "md" }: Prop
               alt={card.name}
               fill
               className="object-cover"
-              sizes={isMd ? "100px" : "72px"}
+              sizes={isMd ? "120px" : "90px"}
             />
           </div>
         ) : (
@@ -52,7 +52,7 @@ export function TarotCardDisplay({ card, revealed, position, size = "md" }: Prop
         )}
       </div>
       {revealed && (
-        <p className={`${isMd ? "text-[10px]" : "text-[8px]"} text-amber-200/70 text-center max-w-[100px] leading-tight font-serif`}>
+        <p className={`${isMd ? "text-xs" : "text-[10px]"} text-amber-200/70 text-center max-w-[120px] leading-tight font-serif`}>
           {card.name}
         </p>
       )}

@@ -167,14 +167,14 @@ export default function Home() {
         ))}
       </div>
 
-      <div className="w-full max-w-md mx-auto relative z-10">
+      <div className="w-full max-w-lg mx-auto relative z-10">
         {/* Header */}
         <div className="text-center mb-8">
-          <p className="text-amber-400/60 text-xs tracking-[0.3em] uppercase mb-1">&#10022; &#10022; &#10022;</p>
-          <h1 className="text-3xl font-serif font-bold text-amber-100 mb-1 tracking-wide">
+          <p className="text-amber-400/60 text-sm tracking-[0.3em] uppercase mb-1">&#10022; &#10022; &#10022;</p>
+          <h1 className="text-4xl font-serif font-bold text-amber-100 mb-1 tracking-wide">
             Mystic Tarot
           </h1>
-          <p className="text-amber-400/50 text-xs tracking-[0.2em] uppercase">
+          <p className="text-amber-400/50 text-sm tracking-[0.2em] uppercase">
             PSD President&apos;s Challenge 2026
           </p>
         </div>
