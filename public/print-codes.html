@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Mystic Tarot — Print Codes</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: Georgia, serif; background: white; }
+
+    @media print {
+      body { margin: 0; }
+      .no-print { display: none !important; }
+      .page { page-break-after: always; }
+      .page:last-child { page-break-after: avoid; }
+    }
+
+    .no-print {
+      padding: 20px;
+      text-align: center;
+      background: #1a1a2e;
+      color: #d4af37;
+    }
+    .no-print button {
+      background: #d4af37;
+      color: #1a1a2e;
+      border: none;
+      padding: 12px 32px;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .page {
+      width: 210mm;
+      min-height: 297mm;
+      margin: 0 auto;
+      padding: 10mm;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(5, 1fr);
+      gap: 4mm;
+    }
+
+    .card {
+      border: 2px solid #1a1a2e;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+      position: relative;
+      background: linear-gradient(135deg, #fefefe 0%, #f8f4e8 100%);
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      inset: 4px;
+      border: 1px solid #d4af37;
+      border-radius: 6px;
+      pointer-events: none;
+    }
+
+    .card-icon {
+      font-size: 28px;
+      color: #1a1a2e;
+      margin-bottom: 6px;
+    }
+
+    .card-title {
+      font-size: 14px;
+      font-weight: bold;
+      color: #1a1a2e;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+
+    .card-subtitle {
+      font-size: 9px;
+      color: #666;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+    }
+
+    .card-code {
+      font-family: 'Courier New', monospace;
+      font-size: 22px;
+      font-weight: bold;
+      letter-spacing: 3px;
+      color: #1a1a2e;
+      background: #f0ead6;
+      padding: 6px 16px;
+      border-radius: 4px;
+      border: 1px solid #d4af37;
+    }
+
+    .card-instruction {
+      font-size: 8px;
+      color: #888;
+      margin-top: 8px;
+      text-align: center;
+      line-height: 1.4;
+    }
+
+    .card-corners {
+      position: absolute;
+      font-size: 10px;
+      color: #d4af37;
+    }
+    .card-corners.tl { top: 8px; left: 10px; }
+    .card-corners.tr { top: 8px; right: 10px; }
+    .card-corners.bl { bottom: 8px; left: 10px; }
+    .card-corners.br { bottom: 8px; right: 10px; }
+  </style>
+</head>
+<body>
+  <div class="no-print">
+    <h1>Mystic Tarot — Printable Code Cards</h1>
+    <p>15 cards per page (3x5 grid) — cut along the borders</p>
+    <button onclick="window.print()">Print All Cards</button>
+  </div>
+
+  <script>
+    const codes = [
+      "00A16F","03ACBA","0534DF","07C7CF","0A34B2","0AF584",
+      "0B7BB2","0BF415","0FFC55","13CFEE","14D855","17183F",
+      "176654","17B49C","1DA80D","1EEB24","1F0B06","20615E",
+      "20AA92","21E66A","22173D","2239C7","22653C","22BFA2",
+      "255370","25C251","2725DD","281B09","286A3A","287889",
+      "2C7890","2E37DB","2E736E","2F3F7A","31D7AC","332C9C",
+      "337336","339E17","33C910","341294","357B3B","35B907",
+      "36A51C","378618","3974A6","3A0CEC","3A8883","3C140A",
+      "3D57AF","3DD670","3E4C62","3ECB46","3F87CE","3FC757",
+      "4116E9","41F8D9","442DFB","46A782","47C89A","4CA21E",
+      "4CCC36","4DB9F0","50F6DC","516B9F","5219E8","52B9BC",
+      "56FED7","5722CF","57D8AA","5834A8","583887","5A8897",
+      "5D753B","5DC376","5E9326","5F38C7","5FF624","6295A6",
+      "63FD5B","65211C","66F205","69EC4B","6B5061","6DE670",
+      "6F417B","70E5EC","71E2B8","71E997","72454C","72D47C",
+      "745519","75C3D8","766DCF","7725C0","77BBB7","7A0FD5",
+      "7F7DD7","816D4A","8204E2","857DFA","8682DF","873941",
+      "89A61A","8A00CE","8B0057","8B172E","8B656E","8B8DEF",
+      "8E263C","90E638","91BC83","93BAF4","953CA1","954DB1",
+      "985738","98CE0C","9921DC","9C6F6F","9CED18","A0131C",
+      "A11F70","A2395B","A746A4","A77A3F","A9F727","AAF6C1",
+      "AC8BFB","AD0595","AD56A4","AE2132","AE7775","AF1A77",
+      "AF2729","AFB631","B00711","B120AD","B160B9","B16F2E",
+      "B1AFB6","B46BC0","B474B9","B5CD0A","B62713","B7029C",
+      "BAE6BE","BB26C1","BDABB2","BEE9DE","C044F0","C0AEFF",
+      "C2DEFE","C492D5","C66136","C6FCB1","C846B2","C96BF6",
+      "C9C938","CB211D","CB9AE3","CC2A0E","CD0912","CD2086",
+      "D05AEF","D09F0E","D0EF92","D169AB","D1D06D","D22791",
+      "D23ED4","D68856","D93CCA","DAD12A","DAD1F8","DD13A5",
+      "DDE4CB","DF687C","E04610","E12FB5","E23523","E29CC5",
+      "E579A0","E5E86E","E609D3","E7D1CA","E8D316","E9A66A",
+      "ECD55D","EFB39F","F04548","F09D7A","F49DFD","F81C0C",
+      "FA0ADD","FA759E","FB7CB7","FBE06C","FC453B","FDF27F",
+      "FF80E0"
+    ];
+
+    const CARDS_PER_PAGE = 15;
+    const pages = Math.ceil(codes.length / CARDS_PER_PAGE);
+
+    for (let p = 0; p < pages; p++) {
+      const pageDiv = document.createElement('div');
+      pageDiv.className = 'page';
+
+      const pageCodes = codes.slice(p * CARDS_PER_PAGE, (p + 1) * CARDS_PER_PAGE);
+
+      pageCodes.forEach(code => {
+        pageDiv.innerHTML += `
+          <div class="card">
+            <span class="card-corners tl">✦</span>
+            <span class="card-corners tr">✦</span>
+            <span class="card-corners bl">✦</span>
+            <span class="card-corners br">✦</span>
+            <div class="card-icon">☽</div>
+            <div class="card-title">Mystic Tarot</div>
+            <div class="card-subtitle">PSD President's Challenge</div>
+            <div class="card-code">${code}</div>
+            <div class="card-instruction">
+              Visit psd-tarot.vercel.app<br>
+              Enter code to reveal your reading
+            </div>
+          </div>
+        `;
+      });
+
+      document.body.appendChild(pageDiv);
+    }
+  </script>
+</body>
+</html>
